@@ -39,6 +39,8 @@ jobs:
           mv bootstrap.bundle.min.js build
           mv bootstrap.min.css build
           mv data.json build
+          mv index.html build
+          mv main.js build
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
