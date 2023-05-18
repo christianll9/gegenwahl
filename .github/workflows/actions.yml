@@ -32,24 +32,17 @@ jobs:
           
       - name: Download Online Resources
         run: python download_resources.py
+    
+      - run: ls
 
       - name: Move static files
         run: |
-          mv ./bootstrap.bundle.min.js ./_site
-          mv ./bootstrap.min.js ./_site
-          mv ./data.json ./_site
+          mkdir build
+          mv bootstrap.bundle.min.js build
+          mv bootstrap.min.js build
+          mv data.json build
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
-
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build # The folder the action should deploy.
