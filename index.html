@@ -1,1 +1,48 @@
-<h1>Test!</h1>
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gegenwahl</title>
+    <link href="bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container mt-5">
+        <h1>Gegenwahl</h1>
+        <p>Du weißt nicht, welche Partei du bei der nächsten Bundestagswahl wählen sollst, aber du weißt stattdessen wen du garantiert nicht im Parlament sehen möchtest? Dann ist <i>Gegenwahl</i> für dich! Hier kannst du eine oder mehrere Parteien auswählen, die deine Stimme nicht bekommen sollen. Im Anschluss wird per Zufall bestimmt, welche der anderen Parteien deine Stimme erhalten soll.</p>
+        <h5><b>Wie funktioniert das?</b></h5>
+        <p>Wir nutzen das Wahlergbnis der letzten Bundestagswahl als Wahrscheinlichkeitsverteilung für den Zufallsgenerator und schließen die entsprechenden Parteien aus der Verteilung aus, gegen die gewählt wird. Das bedeutet auch, dass größere Parteien auch mit einer entsprechend höheren Wahrscheinlichkeit erscheinen als kleine Parteien.</p>
+        <h5><b>Kann ich dem Zufallsgenerator trauen?</b></h5>
+        <p>Der Programmcode, der hinter dieser Website steht, ist vollständig quelloffen und <a href="https://github.com/christianll9/antiwahl">hier</a> einsehbar. Die Website wird auch direkt über die Plattform GitHub gehostet, um sicherzustellen, dass das was du hier siehst auch das ist, was im Programmcode steht.</p>
+        <h5><b>Gibt es auch Grenzen von diesem Ansatz?</b></h5>
+        <p>Wenn keine Partei ausgewählt wird, reproduziert <i>Gegenwahl</i> das Wahlergebnis der letzten Bundestagswahl. Das bedeutet, dass neue Parteien, die bei der letzten Wahl nicht angetreten sind, auch nicht von dem Zufallsgenerator berücksichtigt werden. Damit kann <i>Gegenwahl</i> auch keine gesellschaftlichen Trends abbilden. Wenn zum Beispiel eine Partei nach der letzten Wahl mit einem riesigen Skandal konfrontiert ist und dabei dann heftig an Zustimmung in der Bevölkerung verliert, spiegelt sich der Trend grundsätzlich nicht in der Gegenwahl wieder (es sei denn Nutzer:innen wählen explizit gegen diese Partei).</p>
+    </div>
+    <div class="container mt-5 pt-2" style="background-color:aliceblue">
+        <h5><b>Hier kannst du die ungewünschten Parteien auswählen:</b></h5>
+        <div id="checkboxes"></div>
+        <button id="wuerfel-btn" type="submit" class="btn btn-primary text-white mb-3 mt-3" onclick="alert('#')">Würfeln!</button>
+    </div>
+    <div class="container mt-5 mb-5">
+        <h5><b>Lizenz</b></h5>
+        <p>Der Programmcode hinter dieser Webapp ist vollständig unter der MIT-Lizenz verfügbar (siehe <a href="https://github.com/christianll9/antiwahl/blob/main/LICENSE">hier</a>).</p>
+        <p>Die Daten der Bundestagswahl sind wie folgt lizensiert:<br>
+
+        © Der Bundeswahlleiter, Wiesbaden 2021<br>
+        Datenlizenz Deutschland – Namensnennung – Version 2.0
+        (<a href="https://www.govdata.de/dl-de/by-2-0">https://www.govdata.de/dl-de/by-2-0</a>)</p>
+
+        <h5><b>Impressum</b></h5>
+        Christian Löwens, Hannover<br>
+
+        <a href="mailto:loeFALLEwensMAILmailboxPUNKTorg" 
+        onclick="this.href=this.href
+              .replace(/FALLE/,'')
+              .replace(/MAIL/,'&#64;')
+              .replace(/PUNKT/,'&#46;')"
+        >E-Mail senden</a>
+    </div>
+
+    <script src="bootstrap.bundle.min.js"></script>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
