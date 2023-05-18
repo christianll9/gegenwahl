@@ -39,7 +39,7 @@ jobs:
         run: |
           mkdir build
           mv bootstrap.bundle.min.js build
-          mv bootstrap.min.js build
+          mv bootstrap.min.css build
           mv data.json build
 
       - name: Deploy 🚀
