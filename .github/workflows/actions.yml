@@ -28,7 +28,7 @@ jobs:
       - name: Install Python Packages
         run: |
           python -m pip install --upgrade pip
-          pip install pandas
+          pip install pandas requests
           
       - name: Download Online Resources
         run: python download_resources.py
