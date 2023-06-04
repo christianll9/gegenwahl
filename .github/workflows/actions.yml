@@ -36,10 +36,10 @@ jobs:
       - name: Move static files
         run: |
           mkdir build
-          mv bootstrap.min.css build
+          mv *.js build
+          mv *.css build
           mv data.json build
           mv index.html build
-          mv main.js build
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
