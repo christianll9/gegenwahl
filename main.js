@@ -37,9 +37,22 @@ function rollDice(partyResults) {
     const boxes = Array.from(document.getElementsByClassName("form-check-input"));
     const unCheckedBoxes = boxes.map(box => !box.checked)
     
-    const partyNames = partyResults.map(party => party[0]).filter((_, idx) => unCheckedBoxes[idx]);
+    const partyNames  = partyResults.map(party => party[0]).filter((_, idx) => unCheckedBoxes[idx]);
     const partyShares = partyResults.map(party => party[1]).filter((_, idx) => unCheckedBoxes[idx]);
-    window.alert("Der Zufallsgenerator hat die Partei '" + partyNames[drawFromCustomDistr(partyShares)] + "' ergeben.")
+    const partyColors = partyResults.map(party => party[2]).filter((_, idx) => unCheckedBoxes[idx]);
+    const partyIdx = drawFromCustomDistr(partyShares)
+    document.getElementById('party-name').innerHTML = partyNames[partyIdx];
+    const bgColor = partyColors[partyIdx] ? partyColors[partyIdx] : "FFFFFF";
+    //src http://www.w3.org/TR/AERT#color-contrast
+    const brightness = Math.round((
+        (parseInt("0x" + bgColor.slice(0,2)) * 299) +
+        (parseInt("0x" + bgColor.slice(2,4)) * 587) +
+        (parseInt("0x" + bgColor.slice(4,6)) * 114)
+        ) / 1000);
+    const textColor = (brightness > 125) ? 'black' : 'white';
+    document.getElementById('modal-content').style = `background-color: #${bgColor}; color:${textColor}`;
+    document.getElementsByClassName("modal-backdrop")[0].style =
+        `background-color: color-mix(in hsl, #${bgColor=="FFFFFF" ? "000000" : bgColor} 50%, black);`;
 }
 
 

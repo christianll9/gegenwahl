@@ -1,14 +1,44 @@
 import pandas as pd
-import requests
+from requests import get
+from os.path import basename
+from urllib.parse import urlparse
+
+# Get Bootstrap Style Sheet
+urls = [
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css",
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+]
+for url in urls:
+    r = get(url, allow_redirects=True)
+    open(basename(urlparse(url).path), 'wb').write(r.content)
+
 
 # Get BT Wahl results 2021
 CSV_FILE = 'https://www.bundeswahlleiterin.de/bundestagswahlen/2021/ergebnisse/opendata/csv/kerg2.csv'
-data = pd.read_csv(CSV_FILE, delimiter=";", decimal=",", header=9)
-data[(data.Gebietsart == "Bund") & (data.Gruppenart == "Partei") & (data.Stimme == 2) ][["Gruppenname", "Prozent"]].dropna().to_json("data.json", orient="values")
+data = pd.read_csv(CSV_FILE, delimiter=";", decimal=",", header=9, encoding="utf-8")
+data = data[(data.Gebietsart == "Bund") & (data.Gruppenart == "Partei") & (data.Stimme == 2) ][["Gruppenname", "Prozent"]].dropna()
 
+# Query party colors from Wikidata
+query = """
+SELECT ?party ?partyLabel ?shortname (SAMPLE(?color) AS ?firstColor) (COALESCE(?shortname, ?partyLabel) AS ?Gruppenname) WHERE {
+  ?party wdt:P31/wdt:P279* wd:Q2023214;    # Instance or subclass instance of political party
+  OPTIONAL { ?party wdt:P1813 ?shortname. } # Optional shortname
+  FILTER(lang(?shortname) = "de" || !BOUND(?shortname))
+  {
+    ?party wdt:P465 ?color.      # Has color
+  } UNION {
+    ?party wdt:P6364 ?colorItem. # Has secondary color
+    ?colorItem wdt:P465 ?color.  # Color item has color
+  }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "de". }
+}
+GROUP BY ?party ?partyLabel ?shortname ?Gruppenname
+"""
 
-# Get Bootstrap Style Sheet
-CSS_FILE = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+url = 'https://query.wikidata.org/sparql'
+response = get(url, params={'format': 'json', 'query': query})
+colors = pd.DataFrame(response.json()['results']['bindings']).applymap(lambda x: x["value"], na_action='ignore')[["Gruppenname","firstColor"]]
+colors["Gruppenname_lower"] = colors["Gruppenname"].str.lower()
 
-r = requests.get(CSS_FILE, allow_redirects=True)
-open('bootstrap.min.css', 'wb').write(r.content)
+data["Gruppenname_lower"] = data["Gruppenname"].str.lower()
+pd.merge(data, colors.drop("Gruppenname", axis=1), on="Gruppenname_lower", how="left").drop("Gruppenname_lower", axis=1).to_json("data.json", orient="values", force_ascii=False)
