@@ -1,7 +1,5 @@
 # Gegenwahl
-Repository von der Webapp https://christianll9.github.io/gegenwahl/. Hier kann auch der gesamte Deployment-Process nachvollzogen werden können.
-
-Die aktuelle Version erfüllt die Basisfunktion, es fehlt allerdings eine gute und gerne nutzbare UI. Ansonsten bin ich auch immer für weitere Pull Requests offen.
+Quellcode der Webapp [christianll9.github.io/gegenwahl](https://christianll9.github.io/gegenwahl/). Hier kann auch der gesamte Deployment-Process nachvollzogen werden können.
 
 # Lizenz
 Mein Code ist vollständig unter der MIT-Lizenz verfügbar. Die Lizenz der Daten der Bundestagswahl lautet wie folgt:
