@@ -21,15 +21,24 @@ data = data[(data.Gebietsart == "Bund") & (data.Gruppenart == "Partei") & (data.
 # Query party colors from Wikidata
 query = """
 SELECT ?party ?partyLabel ?shortname (SAMPLE(?color) AS ?firstColor) (COALESCE(?shortname, ?partyLabel) AS ?Gruppenname) WHERE {
-  ?party wdt:P31/wdt:P279* wd:Q2023214;    # Instance or subclass instance of political party
+  ?party wdt:P31/wdt:P279* ?partyType;    # Instance or subclass instance of political party or German political party
+         wdt:P31/wdt:P279* wd:Q7278.      # Instance of political party (general)
+  
   OPTIONAL { ?party wdt:P1813 ?shortname. } # Optional shortname
   FILTER(lang(?shortname) = "de" || !BOUND(?shortname))
+  
+  FILTER(?partyType = wd:Q2023214 || ?partyType = wd:Q7278) # Restrict to either German or general political parties
+  
+  # Include only parties with country tag Germany
+  ?party wdt:P17 wd:Q183. 
+
   {
     ?party wdt:P465 ?color.      # Has color
   } UNION {
     ?party wdt:P6364 ?colorItem. # Has secondary color
     ?colorItem wdt:P465 ?color.  # Color item has color
   }
+  
   SERVICE wikibase:label { bd:serviceParam wikibase:language "de". }
 }
 GROUP BY ?party ?partyLabel ?shortname ?Gruppenname
