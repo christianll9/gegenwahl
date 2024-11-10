@@ -13,8 +13,8 @@ for url in urls:
     open(basename(urlparse(url).path), 'wb').write(r.content)
 
 
-# Get BT Wahl results 2021
-CSV_FILE = 'https://www.bundeswahlleiterin.de/bundestagswahlen/2021/ergebnisse/opendata/csv/kerg2.csv'
+# Get BT Wahl results 2021 + Wiederholungswahl 2024 in Berlin
+CSV_FILE = 'https://www.bundeswahlleiterin.de/bundestagswahlen/2021/ergebnisse/opendata/btw21/20240211_wdhwahl-vgl2021/csv/kerg2.csv'
 data = pd.read_csv(CSV_FILE, delimiter=";", decimal=",", header=9, encoding="utf-8")
 data = data[(data.Gebietsart == "Bund") & (data.Gruppenart == "Partei") & (data.Stimme == 2) ][["Gruppenname", "Prozent"]].dropna()
 
